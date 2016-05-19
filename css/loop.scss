@@ -1,0 +1,110 @@
+$canvas-size: 500px;
+$dot-size: 6px;
+$dot-speed: 2.5s;
+$dot-delay: 0.4s;
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #171723;
+}
+
+.canvas {
+    position: absolute;
+    top: calc(50% - #{$canvas-size / 2});
+    left: calc(50% - #{$canvas-size / 2});
+    width: 100%;
+    height: 100%;
+    max-width: $canvas-size;
+    max-height: $canvas-size;
+}
+
+.group {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes dot-x-animation {
+    0%, 100%, 50% {
+        transform: translateX(0);
+        animation-timing-function: cubic-bezier(0.39, 0.575, 0.565, 1); // out-sine
+    }
+    20% {
+        transform: translateX(-2000%);
+        animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715); // in-sine
+    }
+    75% {
+        transform: translateX(2000%);
+        animation-timing-function: cubic-bezier(0.47, 0, 0.745, 0.715); // in-sine
+    }
+}
+
+@keyframes dot-y-animation {
+    0%, 100% {
+        transform: translateY(0) scale(2);
+        animation-timing-function: ease-out;
+    }
+    50% {
+        transform: translateY(-2200%) scale(1);
+        animation-timing-function: ease-in;
+    }
+}
+
+.dot {
+    position: absolute;
+    top: calc(50% - #{$dot-size / 2});
+    left: calc(50% - #{$dot-size / 2});
+    width: $dot-size;
+    height: $dot-size;
+
+    div {
+        width: 100%;
+        height: 100%;
+        animation: dot-x-animation $dot-speed infinite;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: dot-y-animation $dot-speed infinite;
+        }
+    }
+}
+
+.dot--aqua div::before {
+    background-color: aqua;
+}
+
+.dot--gold {
+    div,
+    div::before {
+        animation-delay: #{$dot-delay / 2};
+    }
+
+    div::before {
+        background-color: gold;
+    }
+}
+
+.dot--tomato {
+    div,
+    div::before {
+        animation-delay: $dot-delay;
+    }
+
+    div::before {
+        background-color: tomato;
+    }
+}
+
+@for $i from 1 through 20 {
+    .dot:nth-child(#{$i}) {
+        transform: rotate(#{($i - 1) * 33.33}grad);
+    }
+}
